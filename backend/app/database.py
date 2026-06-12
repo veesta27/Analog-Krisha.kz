@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 # 1. Указываем путь к файлу базы данных в корне папки backend
-SQLALCHEMY_DATABASE_URL = "sqlite:///./krisha_base.db"
+SQLALCHEMY_DATABASE_URL = "sqlite:///./krisha_basev3.db"
 
 # 2. Создаем движок. 
 # Аргумент check_same_thread нужен только для SQLite, чтобы разные запросы не блокировали друг друга

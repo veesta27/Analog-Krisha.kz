@@ -2,23 +2,20 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import engine, Base, get_db
-from app.models import user # Твой импорт моделей
-from app.schemas.user import UserCreate # Импорт схемы из Шага 2
-from passlib.context import CryptContext
+from app.models import user
+from app.schemas.user import UserCreate
+import bcrypt # <- ИМПОРТИРУЕМ НАПРЯМУЮ BCRYPT ВМЕСТО PASSLIB
 
 # Создаем таблицы при старте
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Krisha Analog API")
 
-# Настройка шифрования паролей
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
-
 @app.get("/")
 def home():
     return {"status": "Бэкенд работает, база данных успешно подключена!"}
 
-# --- ДОБАВЛЯЕМ ЭНДПОИНТ РЕГИСТРАЦИИ ---
+# API URL
 @app.post("/api/register", status_code=status.HTTP_201_CREATED)
 def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
     # 1. Проверяем уникальность email
@@ -31,15 +28,20 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
     if db_phone:
         raise HTTPException(status_code=400, detail="Пользователь с таким телефоном уже зарегистрирован")
 
-    # 3. Хэшируем пароль
-    hashed_pwd = pwd_context.hash(user_data.password)
+    # 3. ХЭШИРУЕМ ПАРОЛЬ НАПРЯМУЮ ЧЕРЕЗ BCRYPT
+    # Переводим пароль в байты
+    password_bytes = user_data.password.encode('utf-8')
+    # Генерируем соль
+    salt = bcrypt.gensalt()
+    # Хэшируем и переводим обратно в строку для хранения в БД
+    hashed_pwd = bcrypt.hashpw(password_bytes, salt).decode('utf-8')
 
     # 4. Создаем запись
     new_user = user.User(
         name=user_data.name,
         email=user_data.email,
         phone=user_data.phone,
-        hashed_password=hashed_pwd
+        hashed_password=hashed_pwd # Сохраняем наш чистый хэш
     )
 
     db.add(new_user)
