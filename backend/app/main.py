@@ -4,12 +4,21 @@ from sqlalchemy.orm import Session
 from app.database import engine, Base, get_db
 from app.models import user
 from app.schemas.user import UserCreate
+from fastapi.middleware.cors import CORSMiddleware
 import bcrypt # <- ИМПОРТИРУЕМ НАПРЯМУЮ BCRYPT ВМЕСТО PASSLIB
 
 # Создаем таблицы при старте
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Krisha Analog API")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Разрешает запросы откуда угодно (для MVP это нормально)
+    allow_credentials=True,
+    allow_methods=["*"],  # Разрешает любые методы (POST, GET и т.д.)
+    allow_headers=["*"],  # Разрешает любые заголовки
+)
 
 @app.get("/")
 def home():
@@ -38,7 +47,7 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
 
     # 4. Создаем запись
     new_user = user.User(
-        name=user_data.name,
+        name=user_data.username,
         email=user_data.email,
         phone=user_data.phone,
         hashed_password=hashed_pwd # Сохраняем наш чистый хэш
