@@ -2,7 +2,7 @@
 from pydantic import BaseModel, EmailStr
 
 class UserCreate(BaseModel):
-    name: str
+    username: str
     email: EmailStr # Проверит, что это реальный email (с собачкой @)
     phone: str
     password: str
