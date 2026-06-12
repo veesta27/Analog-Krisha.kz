@@ -4,3 +4,6 @@ openai
 sqlalchemy
 PyJWT
 python-dotenv
+pydantic[email]
+passlib[bcrypt]
+bcrypt
