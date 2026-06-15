@@ -4,6 +4,7 @@ const emailInput = document.getElementById('email');
 const telnumberInput = document.getElementById('telnumber');
 const usernameInput = document.getElementById('username');
 const passwordInput = document.getElementById('password');
+const errorText = document.getElementById('auth-error');
 
 async function register() {
     const email = emailInput.value;
@@ -20,7 +21,7 @@ async function register() {
     if (response.ok) {
         errorText.style.color = "green";
         errorText.innerText = "Регистрация успешна! Теперь войдите.";
-        window.location.replace('frontend/ads.html')
+        window.location.replace('ads.html');
     } else {
         const error = await response.json();
         errorText.style.color = "red";
@@ -42,7 +43,7 @@ async function login() {
     if (response.ok) {
         errorText.style.color = "green";
         errorText.innerText = "Добро пожаловать!";
-        window.location.replace('frontend/ads.html')
+        window.location.replace('ads.html');
     } else {
         const error = await response.json();
         errorText.style.color = "red";

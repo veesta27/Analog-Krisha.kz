@@ -16,7 +16,7 @@ class User(Base):
 class Add(Base):
     __tablename__ = "Advertisements"
     
-    title = Column(String, nullable=False)
+    title = Column(String, primary_key=True, nullable=False)
     price = Column(Integer, nullable=False)
     status = Column(Boolean, nullable=False)
     room_num = Column(Integer, nullable=False)
