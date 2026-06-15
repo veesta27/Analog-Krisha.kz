@@ -3,7 +3,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import engine, Base, get_db
 from app.models import user
-from app.schemas.user import UserCreate
+from backend.app.schemas.create import UserCreate
 from fastapi.middleware.cors import CORSMiddleware
 import bcrypt # <- ИМПОРТИРУЕМ НАПРЯМУЮ BCRYPT ВМЕСТО PASSLIB
 
@@ -58,3 +58,34 @@ def register_user(user_data: UserCreate, db: Session = Depends(get_db)):
     db.refresh(new_user)
 
     return {"status": "success", "message": "Пользователь успешно создан!", "user_id": new_user.id}
+
+@app.post("/api/login")
+def login_user(login_data: UserLoginStrict, db: Session = Depends(get_db)):
+    # 1. Ищем пользователя, у которого совпадает И email, И телефон
+    db_user = db.query(user.User).filter(
+        user.User.email == login_data.email,
+        user.User.phone == login_data.phone
+    ).first()
+    
+    # Если юзер не найден (не совпала почта или телефон)
+    if not db_user:
+        raise HTTPException(status_code=400, detail="Неверные данные для входа")
+
+    # 2. ПРОВЕРЯЕМ ПАРОЛЬ ЧЕРЕЗ BCRYPT
+    # Переводим введенный юзером пароль в байты
+    provided_password_bytes = login_data.password.encode('utf-8')
+    # Достаем захэшированный пароль из БД и тоже переводим в байты
+    stored_hash_bytes = db_user.hashed_password.encode('utf-8')
+
+    # Сверяем хэши
+    is_valid_password = bcrypt.checkpw(provided_password_bytes, stored_hash_bytes)
+
+    if not is_valid_password:
+        raise HTTPException(status_code=400, detail="Неверные данные для входа")
+
+    # 3. Успешный вход
+    return {
+        "status": "success", 
+        "message": "Вы успешно вошли!", 
+        "user_id": db_user.id
+    }  

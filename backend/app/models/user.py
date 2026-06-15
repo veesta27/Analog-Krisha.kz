@@ -12,3 +12,12 @@ class User(Base):
     phone = Column(String, unique=True, nullable=False)
     hashed_password = Column(String, nullable=False) # Пароль храним только в хэшированном виде!
     created_at = Column(DateTime, default=datetime.utcnow)
+
+class Category(Base):
+    __tablename__ = "Category"
+    
+    title = Column(String, nullable=False)
+    price = Column(Integer, nullable=False)
+    status = Column(Boolean, nullable=False)
+    date = Column(DateTime, default=datetime.utcnow)
+    photo = Column(String, nullable=True)  # nullable=True, если фото необязательно
