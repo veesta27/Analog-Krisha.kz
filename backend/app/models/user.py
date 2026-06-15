@@ -1,5 +1,5 @@
 # backend/app/models/user.py
-from sqlalchemy import Column, Integer, String, DateTime
+from sqlalchemy import Column, Integer, String, DateTime, Boolean
 from datetime import datetime
 from app.database import Base # Импортируем Base из шага 2
 

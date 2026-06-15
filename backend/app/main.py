@@ -3,7 +3,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import engine, Base, get_db
 from app.models import user
-from backend.app.schemas.create import UserCreate
+from backend.app.schemas.create import UserCreate, UserLoginStrict
 from fastapi.middleware.cors import CORSMiddleware
 import bcrypt # <- ИМПОРТИРУЕМ НАПРЯМУЮ BCRYPT ВМЕСТО PASSLIB
 
