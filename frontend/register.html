@@ -7,7 +7,7 @@
         <link rel="stylesheet" href="css/style.css">
     </head>
 
-    <body>
+    <body class="auth-blocks">
         <div id="auth-screen">
             <h2>Вход в систему</h2>
             <input type="email" id="email" placeholder="Электронная почта" required>
@@ -15,6 +15,7 @@
             <input type="text" id="username" placeholder="Имя пользователя">
             <input type="password" id="password" placeholder="Пароль" required>
             <button onclick="register()">Регистрация</button>
+            <p><a href="login.html">Уже есть аккаунт</a></p>
             <p id="auth-error" class="error-text"></p>
         </div>
 

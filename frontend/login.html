@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+
+    <body class="auth-blocks">
+        <div id="auth-screen">
+            <h2>Вход в систему</h2>
+            <input type="email" id="email" placeholder="Электронная почта" required>
+            <input type="tel" id="telnumber" placeholder="Номер телефона" required>
+            <input type="password" id="password" placeholder="Пароль" required>
+            <button onclick="login()">Регистрация</button>
+            <p>Не зарегистрированы? <a href="register.html">Зарегистрироваться</a></p>
+            <p id="auth-error" class="error-text"></p>
+        </div>
+
+        <script src="js/auth.js"></script>
+    </body>
+
+</html>
