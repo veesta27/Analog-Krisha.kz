@@ -16,6 +16,8 @@ class User(Base):
 class Add(Base):
     __tablename__ = "Advertisements"
     
+    id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
     title = Column(String, primary_key=True, nullable=False)
     price = Column(Integer, nullable=False)
     status = Column(Boolean, nullable=False)
@@ -25,3 +27,4 @@ class Add(Base):
     name = Column(String, nullable=False)
     date = Column(DateTime, default=datetime.utcnow)
     photo = Column(String, nullable=True)  # nullable=True, если фото необязательно
+    description = Column(String, nullable=False)

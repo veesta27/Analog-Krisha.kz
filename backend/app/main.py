@@ -3,7 +3,7 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.database import engine, Base, get_db
 from app.models import user
-from app.schemas.create import UserCreate, UserLoginStrict
+from app.schemas.create import UserCreate, UserLoginStrict, AdvertisementCreate, AdvertisementsResponse
 from fastapi.middleware.cors import CORSMiddleware
 import bcrypt # <- ИМПОРТИРУЕМ НАПРЯМУЮ BCRYPT ВМЕСТО PASSLIB
 
@@ -89,3 +89,32 @@ def login_user(login_data: UserLoginStrict, db: Session = Depends(get_db)):
         "message": "Вы успешно вошли!", 
         "user_id": db_user.id
     }  
+
+@app.post("/api/add", response_model=AdvertisementsResponse, status_code=status.HTTP_201_CREATED)
+def create_advertisement(ad_data: AdvertisementCreate, db: Session = Depends(get_db)):
+    
+    # 1. Распаковываем входные данные в модель БД
+    new_ad = user.Add(**ad_data.model_dump())
+
+    # 2. Сохраняем в базу
+    db.add(new_ad)
+    db.commit()
+    db.refresh(new_ad) # Получаем ID из базы
+
+    # 3. Возвращаем просто объект базы данных.
+    # FastAPI сам превратит его в AdvertisementsResponse, 
+    # потому что мы указали это в декораторе @app.post!
+    return new_ad
+
+from typing import List # Если у тебя старая версия Python, но обычно работает просто list[]
+
+@app.get("/api/ads", response_model=list[AdvertisementsResponse])
+def get_all_ads(db: Session = Depends(get_db)):
+    
+    # 1. Делаем запрос к базе данных: "Достань мне ВСЕ записи из таблицы Add"
+    ads = db.query(user.Add).all()
+    
+    # 2. Просто возвращаем этот список
+    # FastAPI сам пробежится по каждому объявлению и пропустит его 
+    # через AdvertisementsResponse (добавив status_text)
+    return ads
