@@ -18,7 +18,6 @@ class Add(Base):
     
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
-    title = Column(String, primary_key=True, nullable=False)
     price = Column(Integer, nullable=False)
     status = Column(Boolean, nullable=False)
     room_num = Column(Integer, nullable=False)
