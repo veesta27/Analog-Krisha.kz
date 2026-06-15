@@ -20,6 +20,29 @@ async function register() {
     if (response.ok) {
         errorText.style.color = "green";
         errorText.innerText = "Регистрация успешна! Теперь войдите.";
+        window.location.replace('frontend/ads.html')
+    } else {
+        const error = await response.json();
+        errorText.style.color = "red";
+        errorText.innerText = error.detail;
+    }
+}
+
+async function login() {
+    const email = emailInput.value;
+    const phone = telnumberInput.value;
+    const password = passwordInput.value;
+
+    const response = await fetch(`${API_URL}/api/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, phone, password })
+    });
+
+    if (response.ok) {
+        errorText.style.color = "green";
+        errorText.innerText = "Добро пожаловать!";
+        window.location.replace('frontend/ads.html')
     } else {
         const error = await response.json();
         errorText.style.color = "red";

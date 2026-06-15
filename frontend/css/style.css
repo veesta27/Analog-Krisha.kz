@@ -4,6 +4,10 @@
     padding: 0;
 }
 
+html {
+    background-color: #f4f4f9;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f9;
@@ -39,3 +43,16 @@ button {
     padding: 10px 15px;
 }
 button:hover { background: #0056b3; }
+
+#main-screen {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+ul {
+    display: flex;
+    justify-content: center;
+    list-style-type: none;
+    gap: 15px;
+}
